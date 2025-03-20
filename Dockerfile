@@ -1,6 +1,6 @@
-#pushing a useless update cause I don't know how to make the endpoint redeploy the latest build
+#rolling back to last known working image
 # Using official PyTorch image with CUDA 12.1 support
-FROM pytorch/pytorch:2.1.-cuda12.1-cudnn8-runtime
+FROM runpod/base:dev-feat-update-comfyui-cuda12.2.0
 
 # Set the working directory
 WORKDIR /app
