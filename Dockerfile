@@ -1,21 +1,15 @@
-# Use RunPod's base image with CUDA support for GPU 
-FROM runpod/base:0.4.0-cuda11.8.0
+# Use the official PyTorch image with CUDA 12.2 support
+FROM pytorch/pytorch:2.0.1-cuda12.2-cudnn8-runtime
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Install necessary Python packages
-# (It's good practice to pin versions for reproducibility)
+# Install additional dependencies
 RUN pip install --no-cache-dir \
-    torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu118 && \
-    pip install --no-cache-dir diffusers==0.22.0 transformers accelerate safetensors runpod boto3
+    diffusers transformers accelerate safetensors runpod boto3 Pillow
 
-# Copy the handler script into the container
+# Copy your handler code into the container
 COPY handler.py .
 
-# (Optional) If you have other scripts or files (e.g., a custom upload helper), copy them as well
-# COPY utils.py .
-
-# Define the command to run when the container starts:
-# This will launch our handler using RunPod's serverless runtime.
-CMD [ "python3", "-u", "handler.py" ]
+# Run the handler using python3
+CMD ["python3", "-u", "handler.py"]
