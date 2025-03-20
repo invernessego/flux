@@ -1,5 +1,5 @@
 # Use the official PyTorch image with CUDA 12.2 support
-FROM pytorch/pytorch:2.0.1-cuda12.2-cudnn8-runtime
+FROM runpod/base
 
 # Set the working directory
 WORKDIR /app
