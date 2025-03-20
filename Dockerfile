@@ -1,5 +1,5 @@
 # Use the official PyTorch image with CUDA 12.2 support
-FROM runpod/base
+FROM runpod/base:dev-feat-update-comfyui-cuda12.2.0
 
 # Set the working directory
 WORKDIR /app
