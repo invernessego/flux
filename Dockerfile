@@ -1,17 +1,21 @@
-#Installing system packages
-RUN apt-get update && apt-get install -y --no-install-recommends git \
-    && rm -rf /var/lib/apt/lists/*
+# Use RunPod's base image with CUDA support for GPU 
+FROM runpod/base:0.4.0-cuda11.8.0
 
-#installing python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Set working directory
+WORKDIR /app
 
-#adding fastAPI code
-COPY app.py
+# Install necessary Python packages
+# (It's good practice to pin versions for reproducibility)
+RUN pip install --no-cache-dir \
+    torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu118 && \
+    pip install --no-cache-dir diffusers==0.22.0 transformers accelerate safetensors runpod boto3
 
-#container startup
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Copy the handler script into the container
+COPY handler.py .
 
-#check to make sure runs app as non-root
-RUN useradd -m -u 1000 appuser && chown -R appuser /app  
-USER appuser  
+# (Optional) If you have other scripts or files (e.g., a custom upload helper), copy them as well
+# COPY utils.py .
+
+# Define the command to run when the container starts:
+# This will launch our handler using RunPod's serverless runtime.
+CMD [ "python", "-u", "handler.py" ]
