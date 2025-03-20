@@ -18,4 +18,4 @@ COPY handler.py .
 
 # Define the command to run when the container starts:
 # This will launch our handler using RunPod's serverless runtime.
-CMD [ "python", "-u", "handler.py" ]
+CMD [ "python3", "-u", "handler.py" ]
